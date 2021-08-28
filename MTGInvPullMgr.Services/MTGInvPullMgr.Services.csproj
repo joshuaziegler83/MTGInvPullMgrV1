@@ -62,6 +62,10 @@
       <Project>{C214A464-BF33-4FCE-BA64-27D5F5FCB875}</Project>
       <Name>MTGInvPullMgr.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTGInvPullMgr.Models\MTGInvPullMgr.Models.csproj">
+      <Project>{23DA9D22-F83A-4868-918D-A1435818BA93}</Project>
+      <Name>MTGInvPullMgr.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
