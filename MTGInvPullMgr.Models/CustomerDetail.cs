@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTGInvPullMgr.Data
+namespace MTGInvPullMgr.Models
 {
-    public class Customer
+    public class CustomerDetail
     {
-        [Key]
-        public Guid CustomerId { get; set; }
-        [Required]
         public string Email { get; set; }
+        [Display(Name = "First Name")]
         public string NameFirst { get; set; }
+        [Display(Name = "Last Name")]
         public string NameLast { get; set; }
     }
 }

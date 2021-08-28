@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTGInvPullMgr.Data
+namespace MTGInvPullMgr.Models
 {
-    public class DealerInventory
+    public class DealerInvListItem
     {
-        [Key]
         public int SKU { get; set; }
-        [Required]
-        public string Name{ get; set; }
-        public string ApiObjectURI { get; set; }
+        public string Name { get; set; }
         public int CurrentInventory { get; set; }
+        public int AvailableInventory { get; }
         public string SetName { get; set; }
         public string Set { get; set; }
         public int CollectorNumber { get; set; }

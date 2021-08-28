@@ -14,7 +14,7 @@ namespace MTGInvPullMgr.Data
         public int PullRequestId { get; set; }
 
         [Required, ForeignKey(nameof(Customer))]
-        public int CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
 
         public virtual Customer Customer { get; set; }
 
@@ -23,6 +23,7 @@ namespace MTGInvPullMgr.Data
             get
             {
                return DateTime.Now.AddHours(2);
+               //return GetExpiration();
             }
         }
 
