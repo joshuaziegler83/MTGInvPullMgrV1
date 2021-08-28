@@ -24,8 +24,8 @@ namespace MTGInvPullMgr.Services
                     CollectorNumber = model.CollectorNumber,
                     IsFoil = model.IsFoil,
                     IsVariant = model.IsVariant
-
                 };
+
             using (var ctx = new ApplicationDbContext())
             {
                 ctx.DealerInventories.Add(entity);
@@ -219,7 +219,40 @@ namespace MTGInvPullMgr.Services
             }
         }
 
-        //helper method to get the inventory
+        public bool UpdateInvItem(DealerInvItemEdit model)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .DealerInventories
+                        .Single(e => e.SKU == model.SKU);
+                entity.Name = model.Name;
+                entity.Set = model.Set;
+                entity.SetName = model.SetName;
+                entity.ApiObjectURI = model.ApiObjectURI;
+                entity.CollectorNumber = model.CollectorNumber;
+                entity.CurrentInventory = model.CurrentInventory;
+                entity.IsFoil = model.IsFoil;
+                entity.IsVariant = model.IsVariant;
+
+                return ctx.SaveChanges() == 1;
+            }
+        }
+
+        public bool DeleteInvItem(int sku)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .DealerInventories
+                        .Single(e => e.SKU == sku);
+                ctx.DealerInventories.Remove(entity);
+                return ctx.SaveChanges() == 1;
+            }
+        }
+        //HELPER METHODS
 
         public int GetAvailableInv(int sku, int currentInv)
         {
@@ -250,12 +283,6 @@ namespace MTGInvPullMgr.Services
                 }
                 return claimedInv;
             }
-
         }
-
-       
     }
-
-    //helper method
-
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MTGInvPullMgr.Models
 {
     public class DealerInvItemEdit
-    {
+    {   public int SKU { get; set; }
         public string Name { get; set; }
         public string ApiObjectURI { get; set; }
         public int CurrentInventory { get; set; }
