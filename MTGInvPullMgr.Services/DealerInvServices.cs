@@ -119,8 +119,15 @@ namespace MTGInvPullMgr.Services
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.CurrentInventory == 0 && e.SetName.Contains(setName))
-                        .Select(
+                        .Where(e => e.CurrentInventory == 0 && e.SetName.Contains(setName));
+                return QueryToList(query);
+                        
+            }
+        }
+
+        private IEnumerable<DealerInvListItem> QueryToList(IQueryable<DealerInventory> query)
+        {
+            var items = query.Select(
                             e =>
                                 new DealerInvListItem
                                 {
@@ -135,9 +142,9 @@ namespace MTGInvPullMgr.Services
                                     IsVariant = e.IsVariant
                                 }
                         );
-                return query.ToArray();
-            }
+            return items.ToArray();
         }
+
         public IEnumerable<DealerInvListItem> GetInvBySet(string set)
         {
             using (var ctx = new ApplicationDbContext())

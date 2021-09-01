@@ -78,6 +78,11 @@
     <Compile Include="Customer.cs" />
     <Compile Include="DealerInventory.cs" />
     <Compile Include="IdentityModels.cs" />
+    <Compile Include="Migrations\202108312159553_intial_migration.cs" />
+    <Compile Include="Migrations\202108312159553_intial_migration.Designer.cs">
+      <DependentUpon>202108312159553_intial_migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PullRequest.cs" />
     <Compile Include="PullRequestItem.cs" />
@@ -85,6 +90,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202108312159553_intial_migration.resx">
+      <DependentUpon>202108312159553_intial_migration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
