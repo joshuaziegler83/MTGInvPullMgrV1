@@ -8,7 +8,7 @@ namespace MTGInvPullMgr.Models
 {
     public class PullRequestItemList
     {
-        public int PullRequestItemId { get; set; }
+        public Guid PullRequestItemId { get; set; }
         public int PullRequestId { get; set; }
         public int SKU { get; set; }
         public int Quantity { get; set; }
