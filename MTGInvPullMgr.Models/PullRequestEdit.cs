@@ -8,7 +8,7 @@ namespace MTGInvPullMgr.Models
 {
     public class PullRequestEdit
     {
-        public int PullRequestId { get; set; }
+        public Guid PullRequestId { get; set; }
         public bool IsPulled { get; set; }
         public bool IsFinalized { get; set; }
         public bool IsPriority { get; set; }

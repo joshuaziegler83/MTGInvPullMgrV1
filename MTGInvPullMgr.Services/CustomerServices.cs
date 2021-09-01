@@ -10,6 +10,12 @@ namespace MTGInvPullMgr.Services
 {
     public class CustomerServices
     {
+        private readonly Guid _customerId;
+        public CustomerServices(Guid customerId) 
+        {
+            _customerId = customerId;
+        }
+
         public CustomerDetail GetCustomerByEmail(string email)
         {
             using (var ctx = new ApplicationDbContext())
