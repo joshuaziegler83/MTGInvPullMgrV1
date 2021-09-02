@@ -57,6 +57,7 @@
     <Compile Include="CustomerServices.cs" />
     <Compile Include="DealerInvServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PullRequestItemServices.cs" />
     <Compile Include="PullRequestServices.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTGInvPullMgr.Models
 {
-    class PullRequestItemCreate
+    public class PullRequestItemCreate
     {
         [Required]
         public Guid PullRequestId { get; set; }

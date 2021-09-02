@@ -68,7 +68,7 @@
     <Compile Include="PullRequestCreate.cs" />
     <Compile Include="PullRequestDetail.cs" />
     <Compile Include="PullRequestItemEdit.cs" />
-    <Compile Include="PullRequestItemList.cs" />
+    <Compile Include="PullRequestItemDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MTGInvPullMgr.Data\MTGInvPullMgr.Data.csproj">
