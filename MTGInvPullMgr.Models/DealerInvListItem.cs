@@ -17,5 +17,7 @@ namespace MTGInvPullMgr.Models
         public int CollectorNumber { get; set; }
         public bool IsFoil { get; set; }
         public bool IsVariant { get; set; }
+        public string Rarity { get; set; }
+        public string Lang { get; set; }
     }
 }

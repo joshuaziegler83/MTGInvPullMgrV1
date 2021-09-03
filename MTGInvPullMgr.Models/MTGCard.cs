@@ -8,13 +8,13 @@ namespace MTGInvPullMgr.Models
 {
     public class MtGCard
     {
-        public string Object { get; set; }
-        public string Id { get; set; }
-        public int TcgplayerId { get; set; }
+        //public string Object { get; set; }
+        // public string Id { get; set; }
+        //public int TcgplayerId { get; set; }
         //public int cardmarket_id { get; set; }
         public string Name { get; set; }
         public string Lang { get; set; }
-        public string Uri { get; set; }
+        //public string Uri { get; set; }
         public string ScryfallUri { get; set; }
         //public string layout { get; set; }
         // public bool highres_image { get; set; }

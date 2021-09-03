@@ -23,8 +23,10 @@ namespace MTGInvPullMgr.Services
                     Set = model.Set,
                     CollectorNumber = model.CollectorNumber,
                     IsFoil = model.IsFoil,
-                    IsVariant = model.IsVariant
-                };
+                    IsVariant = model.IsVariant,
+                    Rarity = model.Rarity,
+                    Lang = model.Lang
+    };
 
             using (var ctx = new ApplicationDbContext())
             {
@@ -53,7 +55,9 @@ namespace MTGInvPullMgr.Services
                         Set = entity.Set,
                         CollectorNumber = entity.CollectorNumber,
                         IsFoil = entity.IsFoil,
-                        IsVariant = entity.IsVariant
+                        IsVariant = entity.IsVariant,
+                        Rarity = entity.Rarity,
+                        Lang = entity.Lang
                     };
             }
         }
@@ -78,7 +82,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -105,7 +111,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -139,7 +147,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
             return items.ToArray();
@@ -165,7 +175,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -192,7 +204,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -219,7 +233,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -242,6 +258,8 @@ namespace MTGInvPullMgr.Services
                 entity.CurrentInventory = model.CurrentInventory;
                 entity.IsFoil = model.IsFoil;
                 entity.IsVariant = model.IsVariant;
+                entity.Rarity = model.Rarity;
+                entity.Lang = model.Lang;
 
                 return ctx.SaveChanges() == 1;
             }
