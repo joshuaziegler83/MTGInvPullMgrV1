@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace MTGInvPullMgr.Models
 {
-    public class PullRequestItemList
+    public class PullRequestItemDetail
     {
-        public int PullRequestItemId { get; set; }
-        public int PullRequestId { get; set; }
+        public Guid PullRequestItemId { get; set; }
+        public Guid PullRequestId { get; set; }
         public int SKU { get; set; }
         public int Quantity { get; set; }
 
     }
+
 }
     
