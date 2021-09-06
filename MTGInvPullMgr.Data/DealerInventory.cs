@@ -10,6 +10,7 @@ namespace MTGInvPullMgr.Data
 {
     public class DealerInventory
     {
+        
         [Key]
         public int SKU { get; set; }
         [Required]
