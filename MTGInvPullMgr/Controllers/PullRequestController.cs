@@ -22,10 +22,13 @@ namespace MTGInvPullMgr.Controllers
 
         public IHttpActionResult Post(PullRequestCreate pullRequestCreate)
         {
-
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var service = PullRequestServices();
+            if (!service.CreatePullRequest(pullRequestCreate))
+                return InternalServerError();
+            return Ok();
         }
-        {
 
-        }
     }
 }
