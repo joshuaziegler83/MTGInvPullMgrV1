@@ -10,7 +10,11 @@ namespace MTGInvPullMgr.Services
 {
     public class DealerInvServices
     {
-
+        private readonly Guid _userId;
+        public DealerInvServices(Guid userId)
+        {
+            _userId = userId;
+        }
         public bool CreateInvItem(DealerInvItemCreate model)
         {
             var entity =

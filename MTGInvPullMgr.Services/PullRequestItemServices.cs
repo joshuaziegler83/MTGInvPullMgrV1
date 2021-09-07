@@ -10,6 +10,11 @@ namespace MTGInvPullMgr.Services
 {
     public class PullRequestItemServices
     {
+        private readonly Guid _userId;
+        public PullRequestItemServices(Guid userId)
+        {
+            _userId = userId;
+        }
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
             var entity =

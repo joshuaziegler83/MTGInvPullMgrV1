@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace MTGInvPullMgr.Services
 {
+
     public class PullRequestServices
     {
+        private readonly Guid _userId;
+        public PullRequestServices(Guid userId)
+        {
+            _userId = userId;
+        }
         public bool CreatePullRequest(PullRequestCreate model)
         {
             var entity =
