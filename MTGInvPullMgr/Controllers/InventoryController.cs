@@ -36,15 +36,21 @@ namespace MTGInvPullMgr.Controllers
             return Ok(invItem);
         }
 
-        
-        public IHttpActionResult Get(string setName)
+        [HttpGet]
+        public IHttpActionResult GetBySetName(string setName)
         {
             DealerInvServices dealerInvServices = CreateDealerInvService();
             var setCards = dealerInvServices.GetInvBySetName(setName);
             return Ok(setCards);
         }
 
-        //To do, get by set
+        [HttpGet]
+        public IHttpActionResult GetBySet(string set)
+        {
+            DealerInvServices dealerInvServices = CreateDealerInvService();
+            var setCards = dealerInvServices.GetInvBySet(set);
+            return Ok(setCards);
+        }
 
         public IHttpActionResult Put(DealerInvItemEdit dealerInvItemEdit)
         {

@@ -95,7 +95,7 @@ namespace MTGInvPullMgr.Models
     public class Prices
     {
         public string Usd { get; set; }
-        public object UsdFoil { get; set; }
+        public string UsdFoil { get; set; }
     }
     /* public class Related_Uris
      {

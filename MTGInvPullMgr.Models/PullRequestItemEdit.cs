@@ -12,6 +12,7 @@ namespace MTGInvPullMgr.Models
         public Guid PullRequestId { get; set; }
         public int SKU { get; set; }
         public int Quantity { get; set; }
+        public decimal Price { get; set; }
 
     }
 }

@@ -16,5 +16,6 @@ namespace MTGInvPullMgr.Models
         public bool IsFinalized { get; set; }
         public bool IsPriority { get; set; }
         public decimal TransactionAmount { get; set; }
+        public decimal Price { get; set; }
     }
 }
