@@ -29,22 +29,23 @@ namespace MTGInvPullMgr.Controllers
                 return InternalServerError();
             return Ok();
         }
-
-        public IHttpActionResult Get()//get all active PullRequests
+        [HttpGet]
+        public IHttpActionResult GetAllPullRequests()//get all active PullRequests
         {
             var service = PullRequestServices();
             var pullRequestList = service.GetActivePullRequests();
             return Ok(pullRequestList);
         }
 
-        public IHttpActionResult Get(Guid customerId)
+        [HttpGet]
+        public IHttpActionResult GetPullRequestByCustomerId(Guid customerId)
         {
             PullRequestServices pullRequestServices = PullRequestServices();
             var pullRequest = pullRequestServices.GetPullRequestByCustomerId(customerId);
             return Ok(pullRequest);
         }
-
-        public IHttpActionResult Get(bool priority)//this input is just here to differentiate from the Get All. The var is really not needed
+        [HttpGet]
+        public IHttpActionResult GetPriority(bool isPriority)
         {
             var service = PullRequestServices();
             var priorityPullReqs = service.GetPriorityPullRequests();

@@ -25,6 +25,8 @@ namespace MTGInvPullMgr.Data
 
         public int Quantity { get; set; }
 
+        public decimal Price { get; set; }
+
 
 
     }

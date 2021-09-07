@@ -1,8 +1,10 @@
 ﻿using MTGInvPullMgr.Data;
 using MTGInvPullMgr.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,7 +24,8 @@ namespace MTGInvPullMgr.Services
                 {
                     PullRequestId = model.PullRequestId,
                     SKU = model.SKU,
-                    Quantity = model.Quantity
+                    Quantity = model.Quantity,
+                    Price = GetPriceBySku(model.SKU)
 
                 };
             using (var ctx = new ApplicationDbContext())
@@ -49,8 +52,6 @@ namespace MTGInvPullMgr.Services
                     };
                 return query.ToArray();
             }
-
-
 
         }
 
@@ -109,7 +110,83 @@ namespace MTGInvPullMgr.Services
             }
         }
 
+        public decimal GetPriceBySku(int sku)
+        {
+            var http = new HttpClient();
+            DealerInvDetail dealerInvDetail = GetItemBySKU(sku);
+            var cardRes = http.GetAsync(dealerInvDetail.ApiObjectURI).Result;
+            var card = JsonConvert.DeserializeObject<MtGCard>
+               (cardRes.Content.ReadAsStringAsync().Result);
+            decimal price;
+            if (card.Foil)
+            {
+                price = Convert.ToDecimal(card.Prices.UsdFoil);
 
+            }
+            else
+            {
+                price = Convert.ToDecimal(card.Prices.Usd);
+            }
+            return price;
+        }
+
+        public int GetAvailableInv(int sku, int currentInv)
+        {
+            int claimedInv = GetClaimedInv(sku);
+            int availableInventory = currentInv - claimedInv;
+            return availableInventory;
+        }
+
+        public int GetClaimedInv(int sku)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var skuList = from pullReq in ctx.PullRequests
+                              join pullItem in ctx.PullRequestItems
+                              on pullReq.PullRequestId
+                              equals pullItem.PullRequestId
+                              where pullReq.ExpirationDateTime > DateTime.Now
+                               && !pullReq.IsFinalized && pullItem.SKU == sku
+                              select new
+                              {
+                                  pullItem.SKU,
+                                  pullItem.Quantity
+                              };
+                int claimedInv = 0;
+                foreach (var item in skuList)
+                {
+                    claimedInv += item.Quantity;
+                }
+                return claimedInv;
+            }
+        }
+
+        public DealerInvDetail GetItemBySKU(int sku)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .DealerInventories
+                        .Single(e => e.SKU == sku);
+                return
+                    new DealerInvDetail
+                    {
+                        SKU = entity.SKU,
+                        Name = entity.Name,
+                        ApiObjectURI = entity.ApiObjectURI,
+                        CurrentInventory = entity.CurrentInventory,
+                        AvailableInventory = GetAvailableInv(entity.SKU, entity.CurrentInventory),
+                        SetName = entity.SetName,
+                        Set = entity.Set,
+                        CollectorNumber = entity.CollectorNumber,
+                        IsFoil = entity.IsFoil,
+                        IsVariant = entity.IsVariant,
+                        Rarity = entity.Rarity,
+                        Lang = entity.Lang
+                    };
+            }
+        }
     }
 }
 
