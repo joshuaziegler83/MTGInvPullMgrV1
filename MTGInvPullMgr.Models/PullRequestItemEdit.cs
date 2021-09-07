@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTGInvPullMgr.Data
+namespace MTGInvPullMgr.Models
 {
     public class PullRequestItemEdit
     {
