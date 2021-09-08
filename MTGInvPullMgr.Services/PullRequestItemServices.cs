@@ -13,10 +13,15 @@ namespace MTGInvPullMgr.Services
     public class PullRequestItemServices
     {
         private readonly Guid _userId;
+
         public PullRequestItemServices(Guid userId)
         {
             _userId = userId;
         }
+            
+       
+        
+      //  private readonly DealerInvServices _dealer = new DealerInvServices(_userId);;
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
             var entity =
@@ -112,8 +117,9 @@ namespace MTGInvPullMgr.Services
 
         public decimal GetPriceBySku(int sku)
         {
+            DealerInvServices dealer = new DealerInvServices(_userId);
             var http = new HttpClient();
-            DealerInvDetail dealerInvDetail = GetItemBySKU(sku);
+            DealerInvDetail dealerInvDetail = dealer.GetItemBySKU(sku);
             var cardRes = http.GetAsync(dealerInvDetail.ApiObjectURI).Result;
             var card = JsonConvert.DeserializeObject<MtGCard>
                (cardRes.Content.ReadAsStringAsync().Result);
@@ -121,7 +127,6 @@ namespace MTGInvPullMgr.Services
             if (card.Foil)
             {
                 price = Convert.ToDecimal(card.Prices.UsdFoil);
-
             }
             else
             {
@@ -130,7 +135,7 @@ namespace MTGInvPullMgr.Services
             return price;
         }
 
-        public int GetAvailableInv(int sku, int currentInv)
+        /*public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);
             int availableInventory = currentInv - claimedInv;
@@ -186,7 +191,7 @@ namespace MTGInvPullMgr.Services
                         Lang = entity.Lang
                     };
             }
-        }
+        }*/
     }
 }
 
