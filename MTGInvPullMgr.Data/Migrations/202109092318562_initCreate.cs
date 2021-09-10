@@ -3,7 +3,7 @@ namespace MTGInvPullMgr.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class intial_migration : DbMigration
+    public partial class initCreate : DbMigration
     {
         public override void Up()
         {
@@ -11,7 +11,7 @@ namespace MTGInvPullMgr.Data.Migrations
                 "dbo.Customer",
                 c => new
                     {
-                        CustomerId = c.Guid(nullable: false),
+                        CustomerId = c.Int(nullable: false, identity: true),
                         Email = c.String(nullable: false),
                         NameFirst = c.String(),
                         NameLast = c.String(),
@@ -31,6 +31,8 @@ namespace MTGInvPullMgr.Data.Migrations
                         CollectorNumber = c.Int(nullable: false),
                         IsFoil = c.Boolean(nullable: false),
                         IsVariant = c.Boolean(nullable: false),
+                        Rarity = c.String(),
+                        Lang = c.String(),
                     })
                 .PrimaryKey(t => t.SKU);
             
@@ -42,6 +44,7 @@ namespace MTGInvPullMgr.Data.Migrations
                         PullRequestId = c.Int(nullable: false),
                         SKU = c.Int(nullable: false),
                         Quantity = c.Int(nullable: false),
+                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
                     })
                 .PrimaryKey(t => t.PullRequestItemId)
                 .ForeignKey("dbo.DealerInventory", t => t.SKU, cascadeDelete: true)
@@ -54,7 +57,7 @@ namespace MTGInvPullMgr.Data.Migrations
                 c => new
                     {
                         PullRequestId = c.Int(nullable: false, identity: true),
-                        CustomerId = c.Guid(nullable: false),
+                        CustomerId = c.Int(nullable: false),
                         IsPulled = c.Boolean(nullable: false),
                         IsFinalized = c.Boolean(nullable: false),
                         IsPriority = c.Boolean(nullable: false),

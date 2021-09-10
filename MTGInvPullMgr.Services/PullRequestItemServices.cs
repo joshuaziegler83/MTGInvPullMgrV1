@@ -60,7 +60,7 @@ namespace MTGInvPullMgr.Services
 
         }
 
-        public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(Guid pullRequestId)
+        public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -126,7 +126,7 @@ namespace MTGInvPullMgr.Services
             decimal price;
             if (card.Foil)
             {
-                price = Convert.ToDecimal(card.Prices.UsdFoil);
+                price = Convert.ToDecimal(card.Prices.Usd);//fix this here.
             }
             else
             {

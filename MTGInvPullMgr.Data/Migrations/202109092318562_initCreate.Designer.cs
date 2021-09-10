@@ -7,13 +7,13 @@ namespace MTGInvPullMgr.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class intial_migration : IMigrationMetadata
+    public sealed partial class initCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(intial_migration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "202108312159553_intial_migration"; }
+            get { return "202109092318562_initCreate"; }
         }
         
         string IMigrationMetadata.Source

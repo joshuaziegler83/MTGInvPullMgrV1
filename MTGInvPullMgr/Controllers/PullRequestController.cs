@@ -38,7 +38,7 @@ namespace MTGInvPullMgr.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetPullRequestByCustomerId(Guid customerId)
+        public IHttpActionResult GetPullRequestByCustomerId(int customerId)
         {
             PullRequestServices pullRequestServices = PullRequestServices();
             var pullRequest = pullRequestServices.GetPullRequestByCustomerId(customerId);

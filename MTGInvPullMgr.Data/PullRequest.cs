@@ -11,21 +11,15 @@ namespace MTGInvPullMgr.Data
     public class PullRequest
     {
         [Key]
-        public Guid PullRequestId { get; set; }
+        public int PullRequestId { get; set; }
 
         [Required, ForeignKey(nameof(Customer))]
-        public Guid CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         public virtual Customer Customer { get; set; }
 
-        public DateTime ExpirationDateTime
-        {
-            get
-            {
-               return DateTime.Now.AddHours(2);
-               //return GetExpiration();
-            }
-        }
+        public DateTime ExpirationDateTime { get; set; } = DateTime.Now.AddHours(2);
+           
 
         public bool IsPulled { get; set; }
 
