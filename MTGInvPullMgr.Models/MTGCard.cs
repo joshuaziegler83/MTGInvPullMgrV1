@@ -8,29 +8,29 @@ namespace MTGInvPullMgr.Models
 {
     public class MtGCard
     {
-        //public string Object { get; set; }
-        // public string Id { get; set; }
-        //public int TcgplayerId { get; set; }
-        //public int cardmarket_id { get; set; }
+        public string Object { get; set; }
+        public string Id { get; set; }
+        public int TcgplayerId { get; set; }
+        public int cardmarket_id { get; set; }
         public string Name { get; set; }
         public string Lang { get; set; }
-        //public string Uri { get; set; }
+        public string Uri { get; set; }
         public string ScryfallUri { get; set; }
-        //public string layout { get; set; }
-        // public bool highres_image { get; set; }
-        // public string image_status { get; set; }
+        public string layout { get; set; }
+        public bool highres_image { get; set; }
+        public string image_status { get; set; }
         public ImageUris ImageUris { get; set; }
-        // public string mana_cost { get; set; }
-        // public float cmc { get; set; }
-        // public string type_line { get; set; }
-        // public string oracle_text { get; set; }
-        // public object[] colors { get; set; }
-        // public string[] color_identity { get; set; }
-        // public object[] keywords { get; set; }
-        //public string[] produced_mana { get; set; }
+        public string mana_cost { get; set; }
+        public float cmc { get; set; }
+        public string type_line { get; set; }
+        public string oracle_text { get; set; }
+        public object[] colors { get; set; }
+        public string[] color_identity { get; set; }
+        public object[] keywords { get; set; }
+        public string[] produced_mana { get; set; }
         public Legalities Legalities { get; set; }
-        // public string[] games { get; set; }
-        // public bool reserved { get; set; }
+        public string[] games { get; set; }
+        public bool reserved { get; set; }
         public bool Foil { get; set; }
         //public bool nonfoil { get; set; }
         // public bool oversized { get; set; }
@@ -95,7 +95,7 @@ namespace MTGInvPullMgr.Models
     public class Prices
     {
         public string Usd { get; set; }
-        public string UsdFoil { get; set; }
+        public string Usd_Foil { get; set; }
     }
     /* public class Related_Uris
      {

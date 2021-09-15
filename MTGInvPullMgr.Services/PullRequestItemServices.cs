@@ -124,9 +124,9 @@ namespace MTGInvPullMgr.Services
             var card = JsonConvert.DeserializeObject<MtGCard>
                (cardRes.Content.ReadAsStringAsync().Result);
             decimal price;
-            if (card.Foil)
+            if (dealerInvDetail.IsFoil)
             {
-                price = Convert.ToDecimal(card.Prices.Usd);//fix this here.
+                price = Convert.ToDecimal(card.Prices.Usd_Foil);
             }
             else
             {

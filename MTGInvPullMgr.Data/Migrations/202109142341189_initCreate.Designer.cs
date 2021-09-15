@@ -13,7 +13,7 @@ namespace MTGInvPullMgr.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202109092318562_initCreate"; }
+            get { return "202109142341189_initCreate"; }
         }
         
         string IMigrationMetadata.Source

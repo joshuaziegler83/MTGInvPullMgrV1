@@ -30,6 +30,7 @@ namespace MTGInvPullMgr.Controllers
             return Ok();
         }
         [HttpGet]
+        [Route("api/PullRequest/")]
         public IHttpActionResult GetAllPullRequests()//get all active PullRequests
         {
             var service = PullRequestServices();
@@ -38,6 +39,7 @@ namespace MTGInvPullMgr.Controllers
         }
 
         [HttpGet]
+        [Route("api/PullRequest/customerId={customerId}")]
         public IHttpActionResult GetPullRequestByCustomerId(int customerId)
         {
             PullRequestServices pullRequestServices = PullRequestServices();
@@ -45,6 +47,7 @@ namespace MTGInvPullMgr.Controllers
             return Ok(pullRequest);
         }
         [HttpGet]
+        [Route("api/PullRequest/isPriority={isPriority}")]
         public IHttpActionResult GetPriority(bool isPriority)
         {
             var service = PullRequestServices();
@@ -52,6 +55,8 @@ namespace MTGInvPullMgr.Controllers
             return Ok(priorityPullReqs);
         }
 
+        [HttpPut]
+        [Route("api/PullRequest/")]
         public IHttpActionResult Put(PullRequestEdit pullRequestEdit)
         {
             if (!ModelState.IsValid)

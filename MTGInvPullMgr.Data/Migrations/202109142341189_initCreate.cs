@@ -58,6 +58,7 @@ namespace MTGInvPullMgr.Data.Migrations
                     {
                         PullRequestId = c.Int(nullable: false, identity: true),
                         CustomerId = c.Int(nullable: false),
+                        ExpirationDateTime = c.DateTime(nullable: false),
                         IsPulled = c.Boolean(nullable: false),
                         IsFinalized = c.Boolean(nullable: false),
                         IsPriority = c.Boolean(nullable: false),

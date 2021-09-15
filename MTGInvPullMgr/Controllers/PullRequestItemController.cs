@@ -55,6 +55,8 @@ namespace MTGInvPullMgr.Controllers
            return Ok(pullReqItems);
         }
 
+        [HttpPut]
+        [Route("api/PullRequestItem/")]
         public IHttpActionResult Put(PullRequestItemEdit pullItemEdit)
         {
             if (!ModelState.IsValid)
