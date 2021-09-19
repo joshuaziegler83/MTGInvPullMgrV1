@@ -31,7 +31,7 @@ namespace MTGInvPullMgr.Services
                     IsVariant = model.IsVariant,
                     Rarity = model.Rarity,
                     Lang = model.Lang
-    };
+                };
 
             using (var ctx = new ApplicationDbContext())
             {

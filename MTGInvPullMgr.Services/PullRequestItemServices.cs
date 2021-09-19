@@ -66,8 +66,9 @@ namespace MTGInvPullMgr.Services
             {
                 var query =
                     from pullRequest in ctx.PullRequests
-                    join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullRequestId
-                    where pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
+                        //join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullRequestId
+                    join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullReqItem.PullRequestId
+                    where pullRequest.PullRequestId == pullRequestId && pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
                     select new PullRequestItemDetail
                     {
                         PullRequestItemId = pullReqItem.PullRequestItemId,
@@ -110,7 +111,9 @@ namespace MTGInvPullMgr.Services
                 entity.PullRequestId = model.PullRequestId;
                 entity.SKU = model.SKU;
                 entity.Quantity = model.Quantity;
-                
+                entity.Price = GetPriceBySku(model.SKU);
+
+
                 return ctx.SaveChanges() == 1;
             }
         }

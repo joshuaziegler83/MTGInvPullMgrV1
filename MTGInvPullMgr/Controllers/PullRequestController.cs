@@ -19,7 +19,8 @@ namespace MTGInvPullMgr.Controllers
             var pullRequestServices = new PullRequestServices(userId);
             return pullRequestServices;
         }
-
+        [HttpPost]
+        [Route("api/PullRequest/")]
         public IHttpActionResult Post(PullRequestCreate pullRequestCreate)
         {
             if (!ModelState.IsValid)
