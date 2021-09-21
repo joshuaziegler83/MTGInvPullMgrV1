@@ -11,10 +11,10 @@ namespace MTGInvPullMgr.Data
     public class PullRequestItem
     {
         [Key]
-        public Guid PullRequestItemId{ get; set; }
+        public int PullRequestItemId{ get; set; }
 
         [Required, ForeignKey(nameof(PullRequest))]
-        public Guid PullRequestId { get; set; }
+        public int PullRequestId { get; set; }
 
         public virtual PullRequest PullRequest { get; set; }
 

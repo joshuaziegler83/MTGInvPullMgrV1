@@ -15,7 +15,7 @@ namespace MTGInvPullMgr.Data
         public int SKU { get; set; }
         [Required]
         public string Name{ get; set; }
-        public string ApiObjectURI { get; set; }//might have to revisit
+        public string ApiObjectURI { get; set; }
         public int CurrentInventory { get; set; }
         public string SetName { get; set; }
         public string Set { get; set; }

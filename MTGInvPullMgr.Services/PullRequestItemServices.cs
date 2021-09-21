@@ -13,10 +13,15 @@ namespace MTGInvPullMgr.Services
     public class PullRequestItemServices
     {
         private readonly Guid _userId;
+
         public PullRequestItemServices(Guid userId)
         {
             _userId = userId;
         }
+            
+       
+        
+      //  private readonly DealerInvServices _dealer = new DealerInvServices(_userId);;
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
             var entity =
@@ -55,14 +60,15 @@ namespace MTGInvPullMgr.Services
 
         }
 
-        public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(Guid pullRequestId)
+        public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
                     from pullRequest in ctx.PullRequests
-                    join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullRequestId
-                    where pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
+                        //join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullRequestId
+                    join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullReqItem.PullRequestId
+                    where pullRequest.PullRequestId == pullRequestId && pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
                     select new PullRequestItemDetail
                     {
                         PullRequestItemId = pullReqItem.PullRequestItemId,
@@ -105,23 +111,25 @@ namespace MTGInvPullMgr.Services
                 entity.PullRequestId = model.PullRequestId;
                 entity.SKU = model.SKU;
                 entity.Quantity = model.Quantity;
-                
+                entity.Price = GetPriceBySku(model.SKU);
+
+
                 return ctx.SaveChanges() == 1;
             }
         }
 
         public decimal GetPriceBySku(int sku)
         {
+            DealerInvServices dealer = new DealerInvServices(_userId);
             var http = new HttpClient();
-            DealerInvDetail dealerInvDetail = GetItemBySKU(sku);
+            DealerInvDetail dealerInvDetail = dealer.GetItemBySKU(sku);
             var cardRes = http.GetAsync(dealerInvDetail.ApiObjectURI).Result;
             var card = JsonConvert.DeserializeObject<MtGCard>
                (cardRes.Content.ReadAsStringAsync().Result);
             decimal price;
-            if (card.Foil)
+            if (dealerInvDetail.IsFoil)
             {
-                price = Convert.ToDecimal(card.Prices.UsdFoil);
-
+                price = Convert.ToDecimal(card.Prices.Usd_Foil);
             }
             else
             {
@@ -130,7 +138,7 @@ namespace MTGInvPullMgr.Services
             return price;
         }
 
-        public int GetAvailableInv(int sku, int currentInv)
+        /*public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);
             int availableInventory = currentInv - claimedInv;
@@ -186,7 +194,7 @@ namespace MTGInvPullMgr.Services
                         Lang = entity.Lang
                     };
             }
-        }
+        }*/
     }
 }
 

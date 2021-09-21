@@ -8,9 +8,9 @@ namespace MTGInvPullMgr.Models
 {
     public class PullRequestDetail
     {
-        public Guid PullRequestId { get; set; }
-        public Guid CustomerId { get; set; }
-        public DateTime ExpirationDateTime { get; }
+        public int PullRequestId { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime ExpirationDateTime { get; set; }
         public bool IsPulled { get; set; }
         public bool IsFinalized { get; set; }
         public bool IsPriority { get; set; }

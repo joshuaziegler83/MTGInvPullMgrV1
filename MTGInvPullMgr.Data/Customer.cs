@@ -10,7 +10,7 @@ namespace MTGInvPullMgr.Data
     public class Customer
     {
         [Key]
-        public Guid CustomerId { get; set; }
+        public int CustomerId { get; set; }
         [Required]
         public string Email { get; set; }
         public string NameFirst { get; set; }

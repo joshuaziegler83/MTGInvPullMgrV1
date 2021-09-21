@@ -8,11 +8,10 @@ namespace MTGInvPullMgr.Models
 {
     public class PullRequestItemEdit
     {
-        public Guid PullRequestItemId { get; set; }
-        public Guid PullRequestId { get; set; }
+        public int PullRequestItemId { get; set; }
+        public int PullRequestId { get; set; }
         public int SKU { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-
     }
 }

@@ -10,7 +10,7 @@ namespace MTGInvPullMgr.Models
     public class PullRequestCreate
     {
         [Required]
-        public Guid CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public DateTime ExpirationDateTime { get; }
         public bool IsPulled { get; set; }
         public bool IsFinalized { get; set; }

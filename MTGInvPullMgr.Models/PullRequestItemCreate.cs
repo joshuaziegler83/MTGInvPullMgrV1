@@ -10,7 +10,7 @@ namespace MTGInvPullMgr.Models
     public class PullRequestItemCreate
     {
         [Required]
-        public Guid PullRequestId { get; set; }
+        public int PullRequestId { get; set; }
 
         [Required]
         public int SKU { get; set; }

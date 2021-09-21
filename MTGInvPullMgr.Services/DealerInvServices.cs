@@ -22,6 +22,7 @@ namespace MTGInvPullMgr.Services
                 {
                     SKU = model.SKU,
                     Name = model.Name,
+                    ApiObjectURI = model.ApiObjectURI,
                     CurrentInventory = model.CurrentInventory,
                     SetName = model.SetName,
                     Set = model.Set,
@@ -30,7 +31,7 @@ namespace MTGInvPullMgr.Services
                     IsVariant = model.IsVariant,
                     Rarity = model.Rarity,
                     Lang = model.Lang
-    };
+                };
 
             using (var ctx = new ApplicationDbContext())
             {
@@ -283,6 +284,7 @@ namespace MTGInvPullMgr.Services
         }
         //HELPER METHODS
 
+        
         public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);

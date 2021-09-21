@@ -34,7 +34,7 @@ namespace MTGInvPullMgr.Services
             }
         }
 
-        public PullRequestDetail GetPullRequestByCustomerId(Guid customerId)
+        public PullRequestDetail GetPullRequestByCustomerId(int customerId)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -45,11 +45,14 @@ namespace MTGInvPullMgr.Services
                 return
                     new PullRequestDetail
                     {
+                        PullRequestId = entity.PullRequestId,
                         CustomerId = entity.CustomerId,
+                        ExpirationDateTime = entity.ExpirationDateTime,
                         IsPulled = entity.IsPulled,
                         IsFinalized = entity.IsFinalized,
                         IsPriority = entity.IsPriority,
                         TransactionAmount = entity.TransactionAmount
+
                     };
             }
         }
@@ -66,14 +69,18 @@ namespace MTGInvPullMgr.Services
                             e =>
                                 new PullRequestDetail
                                 {
+                                    PullRequestId = e.PullRequestId,
                                     CustomerId = e.CustomerId,
+                                    ExpirationDateTime = e.ExpirationDateTime,
                                     IsPulled = e.IsPulled,
                                     IsFinalized = e.IsFinalized,
                                     IsPriority = e.IsPriority,
                                     TransactionAmount = e.TransactionAmount
+                                    
                                 }
                         );
-                return query.ToArray();
+                return query.ToArray();//this seems to return the entity note model. I notice that the expiry was returing in the response
+                
             }
         }
 
@@ -89,7 +96,9 @@ namespace MTGInvPullMgr.Services
                             e =>
                                 new PullRequestDetail
                                 {
+                                    PullRequestId = e.PullRequestId,
                                     CustomerId = e.CustomerId,
+                                    ExpirationDateTime = e.ExpirationDateTime,
                                     IsPulled = e.IsPulled,
                                     IsFinalized = e.IsFinalized,
                                     IsPriority = e.IsPriority,
@@ -114,6 +123,19 @@ namespace MTGInvPullMgr.Services
                 entity.IsPriority = model.IsPriority;
                 entity.TransactionAmount = model.TransactionAmount;
                                
+                return ctx.SaveChanges() == 1;
+            }
+        }
+
+        public bool DeletePullRequest(int prId)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .PullRequests
+                        .Single(e => e.PullRequestId == prId);
+                ctx.PullRequests.Remove(entity);
                 return ctx.SaveChanges() == 1;
             }
         }

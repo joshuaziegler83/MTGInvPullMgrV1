@@ -19,7 +19,8 @@ namespace MTGInvPullMgr.Controllers
             var pullRequestServices = new PullRequestItemServices(userId);
             return pullRequestServices;
         }
-
+        [HttpPost]
+        [Route("api/PullRequestItem/")]
         public IHttpActionResult Post(PullRequestItemCreate pullRequestItemCreate)
         {
             if (!ModelState.IsValid)
@@ -29,28 +30,33 @@ namespace MTGInvPullMgr.Controllers
                 return InternalServerError();
             return Ok();
         }
-
-        public IHttpActionResult Get()
+        [HttpGet]
+        [Route("api/PullRequestItem/")]
+        public IHttpActionResult GetAllPullItems()
         {
             PullRequestItemServices pullRequestItemService = PullRequestItemServices();
             var pullReqItems = pullRequestItemService.GetPullRequestItems();
             return Ok(pullReqItems);
         }
-
-        public IHttpActionResult Get(Guid pullRequestId)
+        [HttpGet]
+        [Route("api/PullRequestItem/pullRequestId={pullRequestId}")]
+        public IHttpActionResult GetItemsByPullRequestId(int pullRequestId)
         {
             PullRequestItemServices service = PullRequestItemServices();
             var pullReqItems = service.GetPullRequestItemsById(pullRequestId);
             return Ok(pullReqItems);
         }
-
-        public IHttpActionResult Get(int sku)
+        [HttpGet]
+        [Route("api/PullRequestItem/sku={sku}")]
+        public IHttpActionResult GetPullRequestItemsBySku(int sku)
         {
             PullRequestItemServices service = PullRequestItemServices();
             var pullReqItems = service.GetPullRequestItemsBySku(sku);
-            return Ok(pullReqItems);
+           return Ok(pullReqItems);
         }
 
+        [HttpPut]
+        [Route("api/PullRequestItem/")]
         public IHttpActionResult Put(PullRequestItemEdit pullItemEdit)
         {
             if (!ModelState.IsValid)
