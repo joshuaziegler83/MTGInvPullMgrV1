@@ -1,5 +1,6 @@
 ﻿using MTGInvPullMgr.Data;
 using MTGInvPullMgr.Models;
+using MTGInvPullMgr.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,20 +25,27 @@ namespace MTGInvPullMgr.Services
       //  private readonly DealerInvServices _dealer = new DealerInvServices(_userId);;
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
-            var entity =
-                new PullRequestItem()
-                {
-                    PullRequestId = model.PullRequestId,
-                    SKU = model.SKU,
-                    Quantity = model.Quantity,
-                    Price = GetPriceBySku(model.SKU)
+            DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
 
-                };
-            using (var ctx = new ApplicationDbContext())
+            if (dealerInvDetail.AvailableInventory > model.Quantity)
             {
-                ctx.PullRequestItems.Add(entity);
-                return ctx.SaveChanges() == 1;
+                var entity =
+                                new PullRequestItem()
+                                {
+                                    PullRequestId = model.PullRequestId,
+                                    SKU = model.SKU,
+                                    Quantity = model.Quantity,
+                                    Price = GetPriceBySku(model.SKU)
+
+                                };
+                using (var ctx = new ApplicationDbContext())
+                {
+                    ctx.PullRequestItems.Add(entity);
+                    return ctx.SaveChanges() == 1;
+                }
             }
+            return false;
+
         }
 
         public IEnumerable<PullRequestItemDetail> GetPullRequestItems()
@@ -48,12 +56,13 @@ namespace MTGInvPullMgr.Services
                     from pullRequest in ctx.PullRequests
                     join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullReqItem.PullRequestId
                     where pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
-                    select new PullRequestItemDetail
+                   select new PullRequestItemDetail
                     {
                         PullRequestItemId = pullReqItem.PullRequestItemId,
                         PullRequestId = pullReqItem.PullRequestId,
                         SKU = pullReqItem.SKU,
-                        Quantity = pullReqItem.Quantity
+                        Quantity = pullReqItem.Quantity,
+                        Price = pullReqItem.Price
                     };
                 return query.ToArray();
             }
@@ -74,7 +83,9 @@ namespace MTGInvPullMgr.Services
                         PullRequestItemId = pullReqItem.PullRequestItemId,
                         PullRequestId = pullReqItem.PullRequestId,
                         SKU = pullReqItem.SKU,
-                        Quantity = pullReqItem.Quantity
+                        Quantity = pullReqItem.Quantity,
+                        Price = pullReqItem.Price
+
                     };
                 return query.ToArray();
             }
@@ -93,7 +104,8 @@ namespace MTGInvPullMgr.Services
                          PullRequestItemId = pullRequestItem.PullRequestItemId,
                          PullRequestId = pullRequestItem.PullRequestId,
                          SKU = pullRequestItem.SKU,
-                         Quantity = pullRequestItem.SKU
+                         Quantity = pullRequestItem.Quantity,
+                         Price = pullRequestItem.Price
                      };
                 return query.ToArray();
             }
@@ -101,21 +113,27 @@ namespace MTGInvPullMgr.Services
 
         public bool UpdatePullRequestItem(PullRequestItemEdit model)
         {
-            using (var ctx = new ApplicationDbContext())
+            DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
+            if (dealerInvDetail.AvailableInventory > model.Quantity)
             {
-                var entity =
-                    ctx
-                        .PullRequestItems
-                        .Single(e => e.PullRequestItemId == model.PullRequestItemId);
-                entity.PullRequestItemId = model.PullRequestItemId;
-                entity.PullRequestId = model.PullRequestId;
-                entity.SKU = model.SKU;
-                entity.Quantity = model.Quantity;
-                entity.Price = GetPriceBySku(model.SKU);
+                using (var ctx = new ApplicationDbContext())
+                {
+                    var entity =
+                        ctx
+                            .PullRequestItems
+                            .Single(e => e.PullRequestItemId == model.PullRequestItemId);
+                    entity.PullRequestItemId = model.PullRequestItemId;
+                    entity.PullRequestId = model.PullRequestId;
+                    entity.SKU = model.SKU;
+                    entity.Quantity = model.Quantity;
+                    entity.Price = GetPriceBySku(model.SKU);
 
 
-                return ctx.SaveChanges() == 1;
+                    return ctx.SaveChanges() == 1;
+                }
             }
+            return false;
+                
         }
 
         public decimal GetPriceBySku(int sku)
@@ -138,7 +156,7 @@ namespace MTGInvPullMgr.Services
             return price;
         }
 
-        /*public int GetAvailableInv(int sku, int currentInv)
+        public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);
             int availableInventory = currentInv - claimedInv;
@@ -194,7 +212,7 @@ namespace MTGInvPullMgr.Services
                         Lang = entity.Lang
                     };
             }
-        }*/
+        }
     }
 }
 
