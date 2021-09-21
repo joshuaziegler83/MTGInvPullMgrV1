@@ -85,6 +85,7 @@ namespace MTGInvPullMgr.Services
                 entity.NameLast = model.NameLast;
                 return ctx.SaveChanges() == 1;
             }
+            
         }
     }
 }
