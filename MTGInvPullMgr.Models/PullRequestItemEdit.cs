@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MTGInvPullMgr.Data
+namespace MTGInvPullMgr.Models
 {
     public class PullRequestItemEdit
     {
@@ -12,6 +12,6 @@ namespace MTGInvPullMgr.Data
         public int PullRequestId { get; set; }
         public int SKU { get; set; }
         public int Quantity { get; set; }
-
+        public decimal Price { get; set; }
     }
 }

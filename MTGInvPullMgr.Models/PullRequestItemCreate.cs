@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTGInvPullMgr.Models
 {
-    class PullRequestItemCreate
+    public class PullRequestItemCreate
     {
         [Required]
         public int PullRequestId { get; set; }
@@ -17,5 +17,7 @@ namespace MTGInvPullMgr.Models
 
         [Required]
         public int Quantity { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

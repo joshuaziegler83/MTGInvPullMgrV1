@@ -10,7 +10,11 @@ namespace MTGInvPullMgr.Services
 {
     public class DealerInvServices
     {
-
+        private readonly Guid _userId;
+        public DealerInvServices(Guid userId)
+        {
+            _userId = userId;
+        }
         public bool CreateInvItem(DealerInvItemCreate model)
         {
             var entity =
@@ -18,12 +22,15 @@ namespace MTGInvPullMgr.Services
                 {
                     SKU = model.SKU,
                     Name = model.Name,
+                    ApiObjectURI = model.ApiObjectURI,
                     CurrentInventory = model.CurrentInventory,
                     SetName = model.SetName,
                     Set = model.Set,
                     CollectorNumber = model.CollectorNumber,
                     IsFoil = model.IsFoil,
-                    IsVariant = model.IsVariant
+                    IsVariant = model.IsVariant,
+                    Rarity = model.Rarity,
+                    Lang = model.Lang
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -53,7 +60,9 @@ namespace MTGInvPullMgr.Services
                         Set = entity.Set,
                         CollectorNumber = entity.CollectorNumber,
                         IsFoil = entity.IsFoil,
-                        IsVariant = entity.IsVariant
+                        IsVariant = entity.IsVariant,
+                        Rarity = entity.Rarity,
+                        Lang = entity.Lang
                     };
             }
         }
@@ -78,7 +87,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -105,7 +116,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -119,8 +132,15 @@ namespace MTGInvPullMgr.Services
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.CurrentInventory == 0 && e.SetName.Contains(setName))
-                        .Select(
+                        .Where(e => e.CurrentInventory == 0 && e.SetName.Contains(setName));
+                return QueryToList(query);
+                        
+            }
+        }
+
+        private IEnumerable<DealerInvListItem> QueryToList(IQueryable<DealerInventory> query)
+        {
+            var items = query.Select(
                             e =>
                                 new DealerInvListItem
                                 {
@@ -132,12 +152,14 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
-                return query.ToArray();
-            }
+            return items.ToArray();
         }
+
         public IEnumerable<DealerInvListItem> GetInvBySet(string set)
         {
             using (var ctx = new ApplicationDbContext())
@@ -158,7 +180,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -185,7 +209,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -212,7 +238,9 @@ namespace MTGInvPullMgr.Services
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
                                     IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
                                 }
                         );
                 return query.ToArray();
@@ -235,6 +263,8 @@ namespace MTGInvPullMgr.Services
                 entity.CurrentInventory = model.CurrentInventory;
                 entity.IsFoil = model.IsFoil;
                 entity.IsVariant = model.IsVariant;
+                entity.Rarity = model.Rarity;
+                entity.Lang = model.Lang;
 
                 return ctx.SaveChanges() == 1;
             }
@@ -254,6 +284,7 @@ namespace MTGInvPullMgr.Services
         }
         //HELPER METHODS
 
+        
         public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);
