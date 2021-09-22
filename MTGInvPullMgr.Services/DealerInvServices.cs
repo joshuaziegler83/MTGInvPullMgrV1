@@ -67,14 +67,14 @@ namespace MTGInvPullMgr.Services
             }
         }
 
-        public IEnumerable<DealerInvListItem> GetInvByName(string name)
+        public IEnumerable<DealerInvListItem> GetInvByName(string cardName)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.Name.Contains(name))
+                        .Where(e => e.Name.Contains(cardName))
                         .Select(
                             e =>
                                 new DealerInvListItem
@@ -82,7 +82,7 @@ namespace MTGInvPullMgr.Services
                                     SKU = e.SKU,
                                     Name = e.Name,
                                     CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    AvailableInventory = 0, //GetAvailableInv(e.SKU, e.CurrentInventory),
                                     SetName = e.SetName,
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
@@ -92,7 +92,12 @@ namespace MTGInvPullMgr.Services
                                     Lang = e.Lang
                                 }
                         );
-                return query.ToArray();
+                List<DealerInvListItem> queryList = query.ToList();
+                foreach (var item in queryList)
+                {
+                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+                }
+                return queryList;
             }
         }
 
@@ -111,7 +116,7 @@ namespace MTGInvPullMgr.Services
                                     SKU = e.SKU,
                                     Name = e.Name,
                                     CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    AvailableInventory = 0,
                                     SetName = e.SetName,
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
@@ -121,7 +126,12 @@ namespace MTGInvPullMgr.Services
                                     Lang = e.Lang
                                 }
                         );
-                return query.ToArray();
+                List <DealerInvListItem> queryList = query.ToList();
+                foreach (var item in queryList)
+                {
+                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+                }
+                return queryList;
             }
         }
 
@@ -147,7 +157,7 @@ namespace MTGInvPullMgr.Services
                                     SKU = e.SKU,
                                     Name = e.Name,
                                     CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    AvailableInventory = 0, //GetAvailableInv(e.SKU, e.CurrentInventory),
                                     SetName = e.SetName,
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
@@ -157,9 +167,14 @@ namespace MTGInvPullMgr.Services
                                     Lang = e.Lang
                                 }
                         );
-            return items.ToArray();
+            List<DealerInvListItem> queryList = items.ToList();
+            foreach (var item in queryList)
+            {
+                item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+            }
+            return queryList;
         }
-
+        
         public IEnumerable<DealerInvListItem> GetInvBySet(string set)
         {
             using (var ctx = new ApplicationDbContext())
@@ -175,7 +190,7 @@ namespace MTGInvPullMgr.Services
                                     SKU = e.SKU,
                                     Name = e.Name,
                                     CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    AvailableInventory = 0,//GetAvailableInv(e.SKU, e.CurrentInventory),
                                     SetName = e.SetName,
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
@@ -185,7 +200,12 @@ namespace MTGInvPullMgr.Services
                                     Lang = e.Lang
                                 }
                         );
-                return query.ToArray();
+                List<DealerInvListItem> queryList = query.ToList();
+                foreach (var item in queryList)
+                {
+                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+                }
+                return queryList;
             }
         }
 
@@ -204,7 +224,7 @@ namespace MTGInvPullMgr.Services
                                     SKU = e.SKU,
                                     Name = e.Name,
                                     CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    AvailableInventory = 0,//GetAvailableInv(e.SKU, e.CurrentInventory),
                                     SetName = e.SetName,
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
@@ -214,7 +234,12 @@ namespace MTGInvPullMgr.Services
                                     Lang = e.Lang
                                 }
                         );
-                return query.ToArray();
+                List<DealerInvListItem> queryList = query.ToList();
+                foreach (var item in queryList)
+                {
+                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+                }
+                return queryList;
             }
         }
 
@@ -233,7 +258,7 @@ namespace MTGInvPullMgr.Services
                                     SKU = e.SKU,
                                     Name = e.Name,
                                     CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    //AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
                                     SetName = e.SetName,
                                     Set = e.Set,
                                     CollectorNumber = e.CollectorNumber,
@@ -243,7 +268,12 @@ namespace MTGInvPullMgr.Services
                                     Lang = e.Lang
                                 }
                         );
-                return query.ToArray();
+                List<DealerInvListItem> queryList = query.ToList();
+                foreach (var item in queryList)
+                {
+                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+                }
+                return queryList;
             }
         }
 
