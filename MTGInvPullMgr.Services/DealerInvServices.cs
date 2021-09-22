@@ -74,30 +74,8 @@ namespace MTGInvPullMgr.Services
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.Name.Contains(cardName))
-                        .Select(
-                            e =>
-                                new DealerInvListItem
-                                {
-                                    SKU = e.SKU,
-                                    Name = e.Name,
-                                    CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = 0, //GetAvailableInv(e.SKU, e.CurrentInventory),
-                                    SetName = e.SetName,
-                                    Set = e.Set,
-                                    CollectorNumber = e.CollectorNumber,
-                                    IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant,
-                                    Rarity = e.Rarity,
-                                    Lang = e.Lang
-                                }
-                        );
-                List<DealerInvListItem> queryList = query.ToList();
-                foreach (var item in queryList)
-                {
-                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
-                }
-                return queryList;
+                        .Where(e => e.Name.Contains(cardName));
+                return QueryToList(query);
             }
         }
 
@@ -108,30 +86,8 @@ namespace MTGInvPullMgr.Services
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.SetName.Contains(setName))
-                        .Select(
-                            e =>
-                                new DealerInvListItem
-                                {
-                                    SKU = e.SKU,
-                                    Name = e.Name,
-                                    CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = 0,
-                                    SetName = e.SetName,
-                                    Set = e.Set,
-                                    CollectorNumber = e.CollectorNumber,
-                                    IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant,
-                                    Rarity = e.Rarity,
-                                    Lang = e.Lang
-                                }
-                        );
-                List <DealerInvListItem> queryList = query.ToList();
-                foreach (var item in queryList)
-                {
-                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
-                }
-                return queryList;
+                        .Where(e => e.SetName.Contains(setName));
+                return QueryToList(query);
             }
         }
 
@@ -148,64 +104,15 @@ namespace MTGInvPullMgr.Services
             }
         }
 
-        private IEnumerable<DealerInvListItem> QueryToList(IQueryable<DealerInventory> query)
-        {
-            var items = query.Select(
-                            e =>
-                                new DealerInvListItem
-                                {
-                                    SKU = e.SKU,
-                                    Name = e.Name,
-                                    CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = 0, //GetAvailableInv(e.SKU, e.CurrentInventory),
-                                    SetName = e.SetName,
-                                    Set = e.Set,
-                                    CollectorNumber = e.CollectorNumber,
-                                    IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant,
-                                    Rarity = e.Rarity,
-                                    Lang = e.Lang
-                                }
-                        );
-            List<DealerInvListItem> queryList = items.ToList();
-            foreach (var item in queryList)
-            {
-                item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
-            }
-            return queryList;
-        }
-        
-        public IEnumerable<DealerInvListItem> GetInvBySet(string set)
+       public IEnumerable<DealerInvListItem> GetInvBySet(string set)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.Set.Contains(set))
-                        .Select(
-                            e =>
-                                new DealerInvListItem
-                                {
-                                    SKU = e.SKU,
-                                    Name = e.Name,
-                                    CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = 0,//GetAvailableInv(e.SKU, e.CurrentInventory),
-                                    SetName = e.SetName,
-                                    Set = e.Set,
-                                    CollectorNumber = e.CollectorNumber,
-                                    IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant,
-                                    Rarity = e.Rarity,
-                                    Lang = e.Lang
-                                }
-                        );
-                List<DealerInvListItem> queryList = query.ToList();
-                foreach (var item in queryList)
-                {
-                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
-                }
-                return queryList;
+                        .Where(e => e.Set.Contains(set));
+                return QueryToList(query);
             }
         }
 
@@ -216,64 +123,20 @@ namespace MTGInvPullMgr.Services
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.IsFoil == true)
-                        .Select(
-                            e =>
-                                new DealerInvListItem
-                                {
-                                    SKU = e.SKU,
-                                    Name = e.Name,
-                                    CurrentInventory = e.CurrentInventory,
-                                    AvailableInventory = 0,//GetAvailableInv(e.SKU, e.CurrentInventory),
-                                    SetName = e.SetName,
-                                    Set = e.Set,
-                                    CollectorNumber = e.CollectorNumber,
-                                    IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant,
-                                    Rarity = e.Rarity,
-                                    Lang = e.Lang
-                                }
-                        );
-                List<DealerInvListItem> queryList = query.ToList();
-                foreach (var item in queryList)
-                {
-                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
-                }
-                return queryList;
+                        .Where(e => e.IsFoil == true);
+                return QueryToList(query);
             }
         }
 
-        public IEnumerable<DealerInvListItem> GetInvByVariants()
+        public IEnumerable<DealerInvListItem> GetInvByVariants(bool isVariant) //only need this to get to controller method
         {
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
                     ctx
                         .DealerInventories
-                        .Where(e => e.IsVariant == true)
-                        .Select(
-                            e =>
-                                new DealerInvListItem
-                                {
-                                    SKU = e.SKU,
-                                    Name = e.Name,
-                                    CurrentInventory = e.CurrentInventory,
-                                    //AvailableInventory = GetAvailableInv(e.SKU, e.CurrentInventory),
-                                    SetName = e.SetName,
-                                    Set = e.Set,
-                                    CollectorNumber = e.CollectorNumber,
-                                    IsFoil = e.IsFoil,
-                                    IsVariant = e.IsVariant,
-                                    Rarity = e.Rarity,
-                                    Lang = e.Lang
-                                }
-                        );
-                List<DealerInvListItem> queryList = query.ToList();
-                foreach (var item in queryList)
-                {
-                    item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
-                }
-                return queryList;
+                        .Where(e => e.IsVariant == true);
+                        return QueryToList(query);
             }
         }
 
@@ -314,7 +177,32 @@ namespace MTGInvPullMgr.Services
         }
         //HELPER METHODS
 
-        
+        private IEnumerable<DealerInvListItem> QueryToList(IQueryable<DealerInventory> query)
+        {
+            var items = query.Select(
+                            e =>
+                                new DealerInvListItem
+                                {
+                                    SKU = e.SKU,
+                                    Name = e.Name,
+                                    CurrentInventory = e.CurrentInventory,
+                                    AvailableInventory = 0, //GetAvailableInv(e.SKU, e.CurrentInventory),
+                                    SetName = e.SetName,
+                                    Set = e.Set,
+                                    CollectorNumber = e.CollectorNumber,
+                                    IsFoil = e.IsFoil,
+                                    IsVariant = e.IsVariant,
+                                    Rarity = e.Rarity,
+                                    Lang = e.Lang
+                                }
+                        );
+            List<DealerInvListItem> queryList = items.ToList();
+            foreach (var item in queryList)
+            {
+                item.AvailableInventory = GetAvailableInv(item.SKU, item.CurrentInventory);
+            }
+            return queryList;
+        }
         public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);

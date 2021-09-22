@@ -20,7 +20,6 @@ namespace MTGInvPullMgr.Controllers
             return inventoryService;
         }
 
-        
         [HttpPost]
         [Route("api/Inventory/")]
         public IHttpActionResult Post(DealerInvItemCreate dealerInvItemCreate)
@@ -65,6 +64,15 @@ namespace MTGInvPullMgr.Controllers
             DealerInvServices dealerInvServices = CreateDealerInvService();
             var setCards = dealerInvServices.GetInvBySet(set);
             return Ok(setCards);
+        }
+
+        [HttpGet]
+        [Route("api/PullRequest/isVariant={isVariant}")]
+        public IHttpActionResult GetByVariant(bool isVariant)
+        {
+            DealerInvServices dealerInvServices = CreateDealerInvService();
+            var variantCards = dealerInvServices.GetInvByVariants(isVariant);
+            return Ok(variantCards);
         }
 
         [HttpPut]
