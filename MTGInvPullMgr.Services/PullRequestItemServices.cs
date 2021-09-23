@@ -25,9 +25,10 @@ namespace MTGInvPullMgr.Services
       //  private readonly DealerInvServices _dealer = new DealerInvServices(_userId);;
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
-            DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
-
-            if (dealerInvDetail.AvailableInventory > model.Quantity)
+            // DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
+            int availInv = GetAvailInvFromService(model.SKU);
+            //if (dealerInvDetail.AvailableInventory > model.Quantity)
+            if(availInv > model.Quantity)
             {
                 var entity =
                                 new PullRequestItem()
@@ -69,7 +70,8 @@ namespace MTGInvPullMgr.Services
 
         }
 
-        public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
+        //public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
+        public List<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -87,7 +89,8 @@ namespace MTGInvPullMgr.Services
                         Price = pullReqItem.Price
 
                     };
-                return query.ToArray();
+                //return query.ToArray();
+                return query.ToList();
             }
         }
 
@@ -113,8 +116,10 @@ namespace MTGInvPullMgr.Services
 
         public bool UpdatePullRequestItem(PullRequestItemEdit model)
         {
-            DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
-            if (dealerInvDetail.AvailableInventory > model.Quantity)
+            //DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
+            //if (dealerInvDetail.AvailableInventory > model.Quantity)
+            int availInv = GetAvailInvFromService(model.SKU);
+            if (availInv > model.Quantity)
             {
                 using (var ctx = new ApplicationDbContext())
                 {
@@ -136,6 +141,7 @@ namespace MTGInvPullMgr.Services
                 
         }
 
+        //HELPER METHODS
         public decimal GetPriceBySku(int sku)
         {
             DealerInvServices dealer = new DealerInvServices(_userId);
@@ -156,63 +162,15 @@ namespace MTGInvPullMgr.Services
             return price;
         }
 
-        public int GetAvailableInv(int sku, int currentInv)
+        public int GetAvailInvFromService(int sku)
         {
-            int claimedInv = GetClaimedInv(sku);
-            int availableInventory = currentInv - claimedInv;
-            return availableInventory;
+            DealerInvServices inventory = new DealerInvServices(_userId);
+            DealerInvDetail invDetail = inventory.GetItemBySKU(sku);
+            if (invDetail != null)
+                return invDetail.AvailableInventory;
+            return 0;
         }
 
-        public int GetClaimedInv(int sku)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var skuList = from pullReq in ctx.PullRequests
-                              join pullItem in ctx.PullRequestItems
-                              on pullReq.PullRequestId
-                              equals pullItem.PullRequestId
-                              where pullReq.ExpirationDateTime > DateTime.Now
-                               && !pullReq.IsFinalized && pullItem.SKU == sku
-                              select new
-                              {
-                                  pullItem.SKU,
-                                  pullItem.Quantity
-                              };
-                int claimedInv = 0;
-                foreach (var item in skuList)
-                {
-                    claimedInv += item.Quantity;
-                }
-                return claimedInv;
-            }
-        }
-
-        public DealerInvDetail GetItemBySKU(int sku)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .DealerInventories
-                        .Single(e => e.SKU == sku);
-                return
-                    new DealerInvDetail
-                    {
-                        SKU = entity.SKU,
-                        Name = entity.Name,
-                        ApiObjectURI = entity.ApiObjectURI,
-                        CurrentInventory = entity.CurrentInventory,
-                        AvailableInventory = GetAvailableInv(entity.SKU, entity.CurrentInventory),
-                        SetName = entity.SetName,
-                        Set = entity.Set,
-                        CollectorNumber = entity.CollectorNumber,
-                        IsFoil = entity.IsFoil,
-                        IsVariant = entity.IsVariant,
-                        Rarity = entity.Rarity,
-                        Lang = entity.Lang
-                    };
-            }
-        }
     }
 }
 
