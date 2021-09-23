@@ -25,9 +25,10 @@ namespace MTGInvPullMgr.Services
       //  private readonly DealerInvServices _dealer = new DealerInvServices(_userId);;
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
-            DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
-
-            if (dealerInvDetail.AvailableInventory > model.Quantity)
+            // DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
+            int availInv = GetAvailInvFromService(model.SKU);
+            //if (dealerInvDetail.AvailableInventory > model.Quantity)
+            if(availInv > model.Quantity)
             {
                 var entity =
                                 new PullRequestItem()
@@ -115,8 +116,10 @@ namespace MTGInvPullMgr.Services
 
         public bool UpdatePullRequestItem(PullRequestItemEdit model)
         {
-            DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
-            if (dealerInvDetail.AvailableInventory > model.Quantity)
+            //DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
+            //if (dealerInvDetail.AvailableInventory > model.Quantity)
+            int availInv = GetAvailInvFromService(model.SKU);
+            if (availInv > model.Quantity)
             {
                 using (var ctx = new ApplicationDbContext())
                 {
@@ -138,6 +141,7 @@ namespace MTGInvPullMgr.Services
                 
         }
 
+        //HELPER METHODS
         public decimal GetPriceBySku(int sku)
         {
             DealerInvServices dealer = new DealerInvServices(_userId);
@@ -158,7 +162,7 @@ namespace MTGInvPullMgr.Services
             return price;
         }
 
-        public int GetAvailableInv(int sku, int currentInv)
+        /*public int GetAvailableInv(int sku, int currentInv)
         {
             int claimedInv = GetClaimedInv(sku);
             int availableInventory = currentInv - claimedInv;
@@ -214,7 +218,17 @@ namespace MTGInvPullMgr.Services
                         Lang = entity.Lang
                     };
             }
+        }*/
+
+        public int GetAvailInvFromService(int sku)
+        {
+            DealerInvServices inventory = new DealerInvServices(_userId);
+            DealerInvDetail invDetail = inventory.GetItemBySKU(sku);
+            if (invDetail != null)
+                return invDetail.AvailableInventory;
+            return 0;
         }
+
     }
 }
 
