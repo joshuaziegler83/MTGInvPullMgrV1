@@ -13,9 +13,11 @@ namespace MTGInvPullMgr.Services
 {
     public class CardServices
     {
-        // public string ScryfallUri { get; set; }
-        //public string Name { get; set; }
-        //public string SetName { get; set; }
+        private readonly Guid _userId;
+        public CardServices(Guid userId)
+        {
+            _userId = userId;
+        }
 
         public MtGCard GetCardByUri(string apiObjectUri)
         {
@@ -37,7 +39,7 @@ namespace MTGInvPullMgr.Services
 
        
 
-        public DealerInvDetail GetItemBySKU(int sku)
+        /*public DealerInvDetail GetItemBySKU(int sku)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -63,17 +65,6 @@ namespace MTGInvPullMgr.Services
                     };
             }
         }
-
-        /* public IEnumerable<MtGCard> GetCardsBySet(string set)
-          {
-              MtGCard mtgCard = new MtGCard();
-              var http = new HttpClient();
-              var cardListJson = http.GetAsync("https://api.scryfall.com/cards/search?q=set:" + set).Result;
-              var cardList = JsonConvert.DeserializeObject<List<RootObject>>(cardListJson.Content.ReadAsStringAsync().Result);
-              List<MtGCard> mtgCards = JsonConvert.PopulateObject(cardList, mtgCard);
-
-          }*/
-
         //TO DO need helper get method to search our own DB by set
 
         public int GetAvailableInv(int sku, int currentInv)
@@ -105,6 +96,15 @@ namespace MTGInvPullMgr.Services
                 }
                 return claimedInv;
             }
+        }*/
+
+        public int GetAvailInvFromService(int sku)
+        {
+            DealerInvServices inventory = new DealerInvServices(_userId);
+            DealerInvDetail invDetail = inventory.GetItemBySKU(sku);
+            if (invDetail != null)
+                return invDetail.AvailableInventory;
+            return 0;
         }
 
 
