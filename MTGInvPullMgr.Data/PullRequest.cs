@@ -18,8 +18,7 @@ namespace MTGInvPullMgr.Data
 
         public virtual Customer Customer { get; set; }
 
-        public DateTime ExpirationDateTime { get; set; } = DateTime.Now.AddHours(2);
-           
+        public DateTime ExpirationDateTime { get; set; } = new DateTime(2100, 12, 31, 23, 59, 59);
 
         public bool IsPulled { get; set; }
 

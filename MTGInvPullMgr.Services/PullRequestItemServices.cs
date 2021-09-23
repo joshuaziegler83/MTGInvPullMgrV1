@@ -69,7 +69,8 @@ namespace MTGInvPullMgr.Services
 
         }
 
-        public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
+        //public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
+        public List<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -87,7 +88,8 @@ namespace MTGInvPullMgr.Services
                         Price = pullReqItem.Price
 
                     };
-                return query.ToArray();
+                //return query.ToArray();
+                return query.ToList();
             }
         }
 

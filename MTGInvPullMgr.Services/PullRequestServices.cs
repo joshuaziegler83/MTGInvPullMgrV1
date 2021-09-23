@@ -3,6 +3,7 @@ using MTGInvPullMgr.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -111,6 +112,8 @@ namespace MTGInvPullMgr.Services
 
         public bool UpdatePullRequest(PullRequestEdit model)
         {
+            DateTime expiry = DateTime.Now.AddHours(2);
+
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
@@ -118,11 +121,22 @@ namespace MTGInvPullMgr.Services
                         .PullRequests
                         .Single(e => e.PullRequestId == model.PullRequestId && e.ExpirationDateTime > DateTime.Now && !e.IsFinalized);
                 entity.PullRequestId = model.PullRequestId;
-                entity.IsPulled = model.IsPulled;
                 entity.IsFinalized = model.IsFinalized;
                 entity.IsPriority = model.IsPriority;
                 entity.TransactionAmount = model.TransactionAmount;
-                               
+                if (model.IsPulled && !entity.IsPulled)
+                {
+                    entity.IsPulled = model.IsPulled;
+                    entity.ExpirationDateTime = expiry;
+                }
+                    
+                if (model.IsFinalized)
+                {
+                    entity.TransactionAmount = GetTransactionAmt(model.PullRequestId);
+                    entity.ExpirationDateTime = DateTime.Now;
+                    UpdateInvFromPullReqFinalization(model.PullRequestId);
+                }
+                            
                 return ctx.SaveChanges() == 1;
             }
         }
@@ -138,6 +152,91 @@ namespace MTGInvPullMgr.Services
                 ctx.PullRequests.Remove(entity);
                 return ctx.SaveChanges() == 1;
             }
+        }
+
+        //HELPER METHODS
+
+        public decimal GetTransactionAmt(int pullRequestId)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                        .PullRequestItems
+                        .Where(e => e.PullRequestId == pullRequestId)
+                        .Select(
+                            e =>
+                                new PullRequestItemDetail
+                                {
+                                    PullRequestItemId = e.PullRequestItemId,
+                                    PullRequestId = e.PullRequestId,
+                                    SKU = e.SKU,
+                                    Quantity = e.Quantity,
+                                    Price = e.Price
+                                }
+                                );
+                List<PullRequestItemDetail> queryList = query.ToList();
+                decimal transactionAmt = 0;
+                foreach (var item in queryList)
+                {
+                    transactionAmt += (item.Price * item.Quantity);
+                }
+                return transactionAmt;
+            }
+                
+        }
+
+        public List<PullRequestItemDetail> GetPRItemsToUpdt(int pullRequestId)
+        {
+            PullRequestItemServices pullReqItems = new PullRequestItemServices(_userId);
+            var http = new HttpClient();
+            List<PullRequestItemDetail> ItemDetail = pullReqItems.GetPullRequestItemsById(pullRequestId);
+            return ItemDetail;
+
+        }
+        
+        public List <DealerInvDetail> GetItemsFromInv(IEnumerable <PullRequestItemDetail> requestItems)
+        {
+            DealerInvServices inventory = new DealerInvServices(_userId);
+            List<DealerInvDetail> invList = new List<DealerInvDetail>();
+            foreach(var request in requestItems)
+            {
+                DealerInvDetail invDetail = inventory.GetItemBySKU(request.SKU);
+                invList.Add(invDetail);
+            }
+            return invList;
+        }
+
+        public bool UpdateInvFromPullReqFinalization(int pullRequestId)
+        {
+            DealerInvServices inventory = new DealerInvServices(_userId);
+            var http = new HttpClient();
+            List<PullRequestItemDetail> ListItems = GetPRItemsToUpdt(pullRequestId);
+            List<DealerInvDetail> ItemList = GetItemsFromInv(ListItems);
+            int index = 0;
+            int updtCnt = 0;
+            for(int i = 0; i < ItemList.Count; i++)
+            {
+               
+                DealerInvItemEdit invEdit = new DealerInvItemEdit();
+                index = ListItems.FindIndex(a => a.SKU == ItemList[i].SKU);
+                invEdit.SKU = ItemList[i].SKU;
+                invEdit.ApiObjectURI = ItemList[i].ApiObjectURI;
+                invEdit.CollectorNumber = ItemList[i].CollectorNumber;
+                invEdit.CurrentInventory = ItemList[i].CurrentInventory - ListItems[index].Quantity;
+                invEdit.IsFoil = ItemList[i].IsFoil;
+                invEdit.IsVariant = ItemList[i].IsVariant;
+                invEdit.Lang = ItemList[i].Lang;
+                invEdit.Name = ItemList[i].Name;
+                invEdit.Rarity = ItemList[i].Rarity;
+                invEdit.Set = ItemList[i].Set;
+                invEdit.SetName = ItemList[i].SetName;
+                if (inventory.UpdateInvItem(invEdit))
+                    updtCnt++;
+            }
+            if (updtCnt == ItemList.Count)
+                return true;
+            return false;
         }
     }
 }

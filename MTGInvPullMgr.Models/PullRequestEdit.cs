@@ -12,6 +12,7 @@ namespace MTGInvPullMgr.Models
         public bool IsPulled { get; set; }
         public bool IsFinalized { get; set; }
         public bool IsPriority { get; set; }
+        public DateTime ExpirationDateTime { get; set; }
         public decimal TransactionAmount { get; set; }
     }
 }
