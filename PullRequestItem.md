@@ -1,7 +1,21 @@
 ## Pull Request Item ##
 
 This is the data model that relates inventory items to a particular parent row on the the PullRequest data model.  The FK Relationship is on the PullRequestId.
-
+```
+public class PullRequestItem
+    {
+        [Key]
+        public int PullRequestItemId{ get; set; }
+        [Required, ForeignKey(nameof(PullRequest))]
+        public int PullRequestId { get; set; }
+        public virtual PullRequest PullRequest { get; set; }
+        [Required, ForeignKey(nameof(DealerInventory))]
+        public int SKU { get; set; }
+        public virtual DealerInventory DealerInventory { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+    }
+```
 ### POST /api/PullRequestItem ###
 
 Requires 2 parameters:
@@ -68,6 +82,7 @@ Ex Return:
     "Price": 0.15
   }
 ```
+**Notes:** *The price reflected here are pulled from an API call to api.scryfall.com based on whether the card is foil or not. Etched pricing is not yet supported.*
 
 ### GET /api/PullRequestItem/pullRequestId={pullRequestId} ###
 Retrieves all requested items by the pullrequest Id.
