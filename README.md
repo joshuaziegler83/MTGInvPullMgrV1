@@ -11,10 +11,18 @@ This solution will also allow a user to login and create a "pull list". Users wi
 In the current version, the pull list is set to expire 2 hours after creation. Version 2 will allow this to be set and will not begin until the items in the pull list are registered by a store user as pulled.
 
 
-### API Documentation ###
+### API Endpoint Documentation ###
 
 [PullRequest Documentation](./PullRequest.md)
 
 [PullRequestItem Documentation](./PullRequestItem.md)
+
+[Inventory Documentation](./Inventory.md)
+
+[Customer Documentation](./Customer.md)
+
+
+
+
 
 
