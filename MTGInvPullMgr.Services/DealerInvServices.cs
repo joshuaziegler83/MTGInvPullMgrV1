@@ -43,7 +43,7 @@ namespace MTGInvPullMgr.Services
         public DealerInvDetail GetItemBySKU(int sku)
         {
             using (var ctx = new ApplicationDbContext())
-            {
+            {//need a try/catch here in the event that the sku does not exist
                 var entity =
                     ctx
                         .DealerInventories
@@ -64,6 +64,7 @@ namespace MTGInvPullMgr.Services
                         Rarity = entity.Rarity,
                         Lang = entity.Lang
                     };
+                
             }
         }
 
