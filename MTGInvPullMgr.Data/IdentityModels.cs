@@ -33,13 +33,13 @@ namespace MTGInvPullMgr.Data
             return new ApplicationDbContext();
         }
 
-        public DbSet<DealerInventory> Notes { get; set; }
+        public DbSet<DealerInventory> DealerInventories { get; set; }
 
-        public DbSet<PullRequest> Notes { get; set; }
+        public DbSet<PullRequest> PullRequests { get; set; }
 
-        public DbSet<PullRequestItem> Notes { get; set; }
+        public DbSet<PullRequestItem> PullRequestItems { get; set; }
 
-        public DbSet<Customer> Notes { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

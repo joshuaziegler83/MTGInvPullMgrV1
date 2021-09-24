@@ -75,12 +75,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Customer.cs" />
+    <Compile Include="DealerInventory.cs" />
     <Compile Include="IdentityModels.cs" />
+    <Compile Include="Migrations\202109142341189_initCreate.cs" />
+    <Compile Include="Migrations\202109142341189_initCreate.Designer.cs">
+      <DependentUpon>202109142341189_initCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PullRequest.cs" />
+    <Compile Include="PullRequestItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202109142341189_initCreate.resx">
+      <DependentUpon>202109142341189_initCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
