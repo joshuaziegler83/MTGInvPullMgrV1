@@ -16,21 +16,19 @@ namespace MTGInvPullMgr.Services
             _customerId = customerId;
         }
 
-        public CustomerDetail GetCustomerByEmail(string email)
+        public IEnumerable<Customer> GetCustomerByEmail(string email)
         {
+            /*char[] ch = {'.'};
+            string fmtEmail = email.TrimStart(ch);*/
+            
             using (var ctx = new ApplicationDbContext())
             {
-                var entity =
+                var query =
                     ctx
                         .Customers
-                        .Single(e => e.Email == email);
-                return
-                    new CustomerDetail
-                    {
-                        Email = entity.Email,
-                        NameFirst = entity.NameFirst,
-                        NameLast = entity.NameLast
-                    };
+                        .Where(e => e.Email.Contains(email));
+                return query.ToArray();
+                
             }
 
         }

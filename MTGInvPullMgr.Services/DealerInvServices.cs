@@ -91,7 +91,7 @@ namespace MTGInvPullMgr.Services
                 return QueryToList(query);
             }
         }
-
+        //for future use
         public IEnumerable<DealerInvListItem> GetOutOfStockBySetName(string setName)
         {
             using (var ctx = new ApplicationDbContext())
