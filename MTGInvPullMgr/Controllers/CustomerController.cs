@@ -21,6 +21,8 @@ namespace MTGInvPullMgr.Controllers
             return CustomerServices;
         }
 
+        [HttpPost]
+        [Route("api/Customer/")]
         public IHttpActionResult Post(CustomerCreate customerCreate)
         {
             if (!ModelState.IsValid)
@@ -32,6 +34,7 @@ namespace MTGInvPullMgr.Controllers
         }
 
         [HttpGet]
+        [Route("api/Customer/")]
         public IHttpActionResult GetAllCustomers()
         {
             var service = CustomerService();
@@ -40,13 +43,18 @@ namespace MTGInvPullMgr.Controllers
         }
 
         [HttpGet]
+        [Route("api/Customer/email={email}")]
         public IHttpActionResult GetCustomersByEmail(string email)
         {
+            string[] emailSplit = email.Split('.');
+            string fmtEmail = emailSplit[0];//remove the .suffix between customer facing form and the request
             CustomerServices customerServices= CustomerService();
-            var customer = customerServices.GetCustomerByEmail(email);
+            var customer = customerServices.GetCustomerByEmail(fmtEmail);
             return Ok(customer);
         }
 
+        [HttpPut]
+        [Route("api/Customer/")]
         public IHttpActionResult Put(CustomerEdit customerEdit)
         {
             if (!ModelState.IsValid)

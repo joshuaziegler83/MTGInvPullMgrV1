@@ -19,16 +19,14 @@ namespace MTGInvPullMgr.Services
         {
             _userId = userId;
         }
-            
-       
-        
-      //  private readonly DealerInvServices _dealer = new DealerInvServices(_userId);;
+
+
+
+
         public bool CreatePullRequestItem(PullRequestItemCreate model)
         {
-            // DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
             int availInv = GetAvailInvFromService(model.SKU);
-            //if (dealerInvDetail.AvailableInventory > model.Quantity)
-            if(availInv >= model.Quantity)
+            if (availInv >= model.Quantity)
             {
                 var entity =
                                 new PullRequestItem()
@@ -57,7 +55,7 @@ namespace MTGInvPullMgr.Services
                     from pullRequest in ctx.PullRequests
                     join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullReqItem.PullRequestId
                     where pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
-                   select new PullRequestItemDetail
+                    select new PullRequestItemDetail
                     {
                         PullRequestItemId = pullReqItem.PullRequestItemId,
                         PullRequestId = pullReqItem.PullRequestId,
@@ -70,14 +68,12 @@ namespace MTGInvPullMgr.Services
 
         }
 
-        //public IEnumerable<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
         public List<PullRequestItemDetail> GetPullRequestItemsById(int pullRequestId)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
                     from pullRequest in ctx.PullRequests
-                        //join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullRequestId
                     join pullReqItem in ctx.PullRequestItems on pullRequest.PullRequestId equals pullReqItem.PullRequestId
                     where pullRequest.PullRequestId == pullRequestId && pullRequest.ExpirationDateTime > DateTime.Now && !pullRequest.IsFinalized
                     select new PullRequestItemDetail
@@ -89,7 +85,6 @@ namespace MTGInvPullMgr.Services
                         Price = pullReqItem.Price
 
                     };
-                //return query.ToArray();
                 return query.ToList();
             }
         }
@@ -116,8 +111,6 @@ namespace MTGInvPullMgr.Services
 
         public bool UpdatePullRequestItem(PullRequestItemEdit model)
         {
-            //DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
-            //if (dealerInvDetail.AvailableInventory > model.Quantity)
             int availInv = GetAvailInvFromService(model.SKU);
             if (availInv >= model.Quantity)
             {
@@ -138,7 +131,7 @@ namespace MTGInvPullMgr.Services
                 }
             }
             return false;
-                
+
         }
 
         //HELPER METHODS
