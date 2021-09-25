@@ -79,7 +79,7 @@ namespace MTGInvPullMgr.Services
                 var entity =
                    ctx
                        .Customers
-                       .Single(e => e.Email == model.Email);//need some exception handling if no email is found
+                       .Single(e => e.Email == model.Email);
                 entity.Email = model.Email;
                 entity.NameFirst = model.NameFirst;
                 entity.NameLast = model.NameLast;

@@ -28,7 +28,7 @@ namespace MTGInvPullMgr.Services
             // DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
             int availInv = GetAvailInvFromService(model.SKU);
             //if (dealerInvDetail.AvailableInventory > model.Quantity)
-            if(availInv > model.Quantity)
+            if(availInv >= model.Quantity)
             {
                 var entity =
                                 new PullRequestItem()
@@ -119,7 +119,7 @@ namespace MTGInvPullMgr.Services
             //DealerInvDetail dealerInvDetail = GetItemBySKU(model.SKU);
             //if (dealerInvDetail.AvailableInventory > model.Quantity)
             int availInv = GetAvailInvFromService(model.SKU);
-            if (availInv > model.Quantity)
+            if (availInv >= model.Quantity)
             {
                 using (var ctx = new ApplicationDbContext())
                 {
